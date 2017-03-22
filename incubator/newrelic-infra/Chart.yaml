@@ -1,0 +1,12 @@
+name: newrelic-infra
+description: New Relic Infrastructure Agent
+version: 0.1.0
+keywords:
+  - monitoring
+  - alerting
+  - metrics
+  - telemetry
+icon: https://newrelic.com/assets/newrelic/source/NewRelic-logo-square.png
+maintainers:
+  - name: Next Gen Platforms, Continuous Delivery Team
+    email: Lst-tech.ngp.cd@nike.com
