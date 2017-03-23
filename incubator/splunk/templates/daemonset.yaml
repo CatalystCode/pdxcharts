@@ -31,7 +31,7 @@ spec:
         - mountPath: /host/containers
           readOnly: true
           name: container-logs
-        - mountPath: /opt/splunk/etc/apps/cdt-eng/local
+        - mountPath: /opt/splunk/etc/apps/splunkclouduf/default/local
           name: splunk-config
         - mountPath: /var/log/messages
           readOnly: true
