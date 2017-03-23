@@ -1,0 +1,57 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: {{ template "fullname" . }}
+  namespace: kube-system
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  template:
+    metadata:
+      labels:
+        k8s-app: splunk-uf
+        version: v1
+        kubernetes.io/cluster-service: "true"
+    spec:
+      containers:
+      - name: splunkuf
+        image: splunk/universalforwarder:6.5.0-monitor
+        env:
+        - name: SPLUNK_START_ARGS
+          value: "--accept-license --answer-yes"
+        - name: SPLUNK_USER
+          value: root
+        volumeMounts:
+        - mountPath: /var/run/docker.sock
+          readOnly: true
+          name: docker-socket
+        - mountPath: /host/containers
+          readOnly: true
+          name: container-logs
+        - mountPath: /opt/splunk/etc/apps/cdt-eng/local
+          name: splunk-config
+        - mountPath: /var/log/messages
+          readOnly: true
+          name: messages
+        - mountPath: /var/log/secure
+          readOnly: true
+          name: secure
+      volumes:
+        - name: docker-socket
+          hostPath:
+            path: /var/run/docker.sock
+        - name: container-logs
+          hostPath:
+            path: /var/lib/docker/containers
+        - name: splunk-config
+          configMap:
+            name: {{ template "fullname" . }}-config
+        - name: messages
+          hostPath:
+            path: /var/log/messages
+        - name: secure
+          hostPath:
+            path: /var/log/secure

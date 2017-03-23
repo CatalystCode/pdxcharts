@@ -1,0 +1,2 @@
+rootProject.name = 'pdxazure'
+include "pdxazure-core-code","pdxazure-remote-tests"

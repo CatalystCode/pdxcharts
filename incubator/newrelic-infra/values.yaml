@@ -1,0 +1,14 @@
+# Default values for newrelic-infra.
+image:
+  repository: 539783510382.dkr.ecr.us-west-2.amazonaws.com/newrelic-infra
+  tag: latest
+  pullPolicy: IfNotPresent
+
+nria:
+  apiKey: "<REDACTED>" # TODO: set your API key here, and uncomment this line.
+
+resources:
+  requests:
+    cpu: 0.15
+    memory: 256m
+
