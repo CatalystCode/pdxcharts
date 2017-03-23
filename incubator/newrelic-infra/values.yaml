@@ -1,8 +1,8 @@
 # Default values for newrelic-infra.
 image:
-  repository: 539783510382.dkr.ecr.us-west-2.amazonaws.com/newrelic-infra
+  repository: nikeacr.azurecr.io/newrelic-infra
   tag: latest
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 nria:
   apiKey: "<REDACTED>" # TODO: set your API key here, and uncomment this line.
