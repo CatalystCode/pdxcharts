@@ -1,0 +1,38 @@
+{{- if .Values.nria.apiKey }}
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}
+      name: {{ template "fullname" . }}
+    spec:
+      hostPID: true
+      hostIPC: true
+      hostNetwork: true
+      containers:
+        - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          name: {{ .Chart.Name }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+          env:
+            - name: NRIA_LICENSE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "fullname" . }}
+                  key: api-key
+          volumeMounts:
+            - name: root
+              mountPath: /mnt/ROOT
+              readOnly: true
+      volumes:
+        - name: root
+          hostPath:
+            path: /
+{{ end }}

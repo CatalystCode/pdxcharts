@@ -1,0 +1,53 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ template "fullname" . }}-config
+  namespace: kube-system
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  inputs.conf: |
+    [default]
+    index = os
+
+    [monitor:///var/log/messages]
+    [monitor:///var/log/secure]
+    [monitor:///var/log/containers/*.log]
+    disabled = 0
+    sourcetype = kubernetes
+  outputs.conf: |
+    [tcpout]
+    disabled=false
+    defaultGroup=cloud_indexers
+
+    [tcpout:cloud_indexers]
+    dnsResolutionInterval = 60
+    forceTimebasedAutoLB = true
+    autoLB = true
+    server = inputs1.cdt-eng.splunkcloud.com:9997, inputs2.cdt-eng.splunkcloud.com:9997, inputs3.cdt-eng.splunkcloud.com:9997, inputs4.cdt-eng.splunkcloud.com:9997, inputs5.cdt-eng.splunkcloud.com:9997
+    sslCertPath = $SPLUNK_HOME/etc/apps/cdt-eng/local/sc-cdt-eng.pem
+    sslPassword = $1$x0H3UscsHBppVEAATQ==
+    sslRootCAPath = $SPLUNK_HOME/etc/apps/cdt-eng/local/sc-ca-cdt-eng.cert
+    sslVerifyServerCert = false
+
+    [tcpout:cloud_indexers2]
+    dnsResolutionInterval = 60
+    forceTimebasedAutoLB = true
+    autoLB = true
+    server = inputs1.cdt-eng.splunkcloud.com:9997, inputs2.cdt-eng.splunkcloud.com:9997, inputs3.cdt-eng.splunkcloud.com:9997, inputs4.cdt-eng.splunkcloud.com:9997, inputs5.cdt-eng.splunkcloud.com:9997
+    sslCertPath = $SPLUNK_HOME/etc/apps/cdt-eng/local/sc-cdt-eng.pem
+    sslPassword = $1$x0H3UscsHBppVEAATQ==
+    sslRootCAPath = $SPLUNK_HOME/etc/apps/cdt-eng/local/sc-ca-cdt-eng.cert
+    sslVerifyServerCert = false
+  props.conf: |
+    [kubernetes]
+    INDEXED_EXTRACTIONS = json
+    SEDCMD-removelog = s/{"log":"{(.*)}"/{\1/
+  transforms.conf: "[kubernetes-log-filename]\nREGEX = /var/log/containers/(?<podname>[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*)_(?<namespace>[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*)_(?<containername>(POD|[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*))-(?<containerid>[0-9a-f]+).log\nSOURCE_KEY
+    = source\n \n[kubernetes-log-row]\nREGEX = [0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2},[0-9]{3}
+    - (?<component>(\\w|-)+) - (?<level>(\\w|-)+) - (?<thread>\\d+) - (?<module>(\\w|-)+)
+    - (?<function>(\\w|-)+) - (?<message>.*)\n \n[kubernetes-log-row2]\nREGEX = \\[?[0-9]{4}-[0-9]{2}-[0-9]{2}
+    [0-9]{2}:[0-9]{2}:[0-9]{2} \\+[0-9]{4}\\]?( \\[[0-9]+\\] )?\\[(?<level>\\w+)\\](?<message>.*)\n"
