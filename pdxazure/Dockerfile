@@ -13,4 +13,4 @@ COPY newrelic.yml .
 
 EXPOSE 8080
 
-CMD ["java", "-D@appId=pdxazure", "-D@environment=local", "-javaagent:newrelic.jar", "-jar", "pdxazure-1.0.0-SNAPSHOT.jar"]
+CMD ["java", "-D@appId=pdxazure", "-D@environment=test", "-javaagent:newrelic.jar", "-jar", "pdxazure-1.0.0-SNAPSHOT.jar"]
