@@ -10,7 +10,8 @@ metadata:
     heritage: "{{ .Release.Service }}"
 data:
   inputs.conf: |
-    [monitor:///host/containers/.../*.log]
+    [monitor:///var/log/containers/*.log]
+    host_regex = /var/log/containers/(.*)_.*_.*\.log
     sourcetype = kubernetes
   cacert.pem: |
     -----BEGIN CERTIFICATE-----
