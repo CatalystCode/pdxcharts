@@ -2,7 +2,6 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: {{ template "fullname" . }}-splunk-config
-  namespace: kube-system
   labels:
     app: {{ template "fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
@@ -10,9 +9,7 @@ metadata:
     heritage: "{{ .Release.Service }}"
 data:
   inputs.conf: |
-    [monitor:///var/log/containers/*.log]
-    host_regex = /var/log/containers/(.*)_.*_.*\.log
-    sourcetype = kubernetes
+    [monitor:///var/log/nike/*.log]
   cacert.pem: |
     -----BEGIN CERTIFICATE-----
     MIIB/DCCAaGgAwIBAgIBADAKBggqhkjOPQQDAjB+MSswKQYDVQQDEyJTcGx1bmsg
