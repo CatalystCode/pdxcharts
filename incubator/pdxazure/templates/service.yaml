@@ -8,12 +8,9 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-  name: pdxazure-deployment
-  selfLink: /api/v1/namespaces//services/pdxazure-deployment
 spec:
-  clusterIP: <unknown>
   ports:
-  - nodePort: 32384
+  - nodePort: 32385
     port: 8080
     protocol: TCP
     targetPort: 8080
