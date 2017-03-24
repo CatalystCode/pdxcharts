@@ -26,5 +26,19 @@ spec:
               key: api-key
         ports:
         - containerPort: 8080
+      - name: pdxazure-splunk
+        image: splunk/universalforwarder:6.5.2
+        env:
+        - name: SPLUNK_START_ARGS
+          value: "--accept-license --answer-yes"
+        - name: SPLUNK_USER
+          value: root
+        volumeMounts:
+        - mountPath: /opt/splunk/etc/apps/splunkclouduf/default
+          name: splunk-config
+      volumes:
+        - name: splunk-config
+          configMap:
+            name: {{ template "fullname" . }}-splunk-config
       imagePullSecrets:
       - name: acr-secret
