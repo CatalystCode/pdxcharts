@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: splunkuf
-        image: splunk/universalforwarder:6.5.0-monitor
+        image: splunk/universalforwarder:6.5.2-monitor
         env:
         - name: SPLUNK_START_ARGS
           value: "--accept-license --answer-yes"
@@ -28,17 +28,14 @@ spec:
         - mountPath: /var/run/docker.sock
           readOnly: true
           name: docker-socket
-        - mountPath: /host/containers
+        - mountPath: /var/lib/docker/containers
           readOnly: true
           name: container-logs
         - mountPath: /opt/splunk/etc/apps/splunkclouduf/default
           name: splunk-config
-        - mountPath: /var/log/messages
+        - mountPath: /var/log/containers
           readOnly: true
-          name: messages
-        - mountPath: /var/log/secure
-          readOnly: true
-          name: secure
+          name: pod-logs
       volumes:
         - name: docker-socket
           hostPath:
@@ -46,12 +43,9 @@ spec:
         - name: container-logs
           hostPath:
             path: /var/lib/docker/containers
+        - name: pod-logs
+          hostPath:
+            path: /var/log/containers
         - name: splunk-config
           configMap:
             name: {{ template "fullname" . }}-config
-        - name: messages
-          hostPath:
-            path: /var/log/messages
-        - name: secure
-          hostPath:
-            path: /var/log/secure
