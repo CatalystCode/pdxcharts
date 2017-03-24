@@ -1,10 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  creationTimestamp: null
+  name: {{ template "fullname" . }}
   labels:
-    app: pdxazure-app
-    name: pdxazure
+    name: {{ template "fullname" . }}
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
   name: pdxazure-deployment
   selfLink: /api/v1/namespaces//services/pdxazure-deployment
 spec:
