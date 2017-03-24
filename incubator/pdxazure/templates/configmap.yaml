@@ -1,0 +1,97 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ template "fullname" . }}-config
+  namespace: kube-system
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  inputs.conf: |
+    [monitor:///var/log/containers/*.log]
+    host_regex = /var/log/containers/(.*)_.*_.*\.log
+    sourcetype = kubernetes
+  cacert.pem: |
+    -----BEGIN CERTIFICATE-----
+    MIIB/DCCAaGgAwIBAgIBADAKBggqhkjOPQQDAjB+MSswKQYDVQQDEyJTcGx1bmsg
+    Q2xvdWQgQ2VydGlmaWNhdGUgQXV0aG9yaXR5MRYwFAYDVQQHEw1TYW4gRnJhbmNp
+    c2NvMRMwEQYDVQQKEwpTcGx1bmsgSW5jMQswCQYDVQQIEwJDQTEVMBMGA1UECxMM
+    U3BsdW5rIENsb3VkMB4XDTE0MTExMDA3MDAxOFoXDTM0MTEwNTA3MDAxOFowfjEr
+    MCkGA1UEAxMiU3BsdW5rIENsb3VkIENlcnRpZmljYXRlIEF1dGhvcml0eTEWMBQG
+    A1UEBxMNU2FuIEZyYW5jaXNjbzETMBEGA1UEChMKU3BsdW5rIEluYzELMAkGA1UE
+    CBMCQ0ExFTATBgNVBAsTDFNwbHVuayBDbG91ZDBZMBMGByqGSM49AgEGCCqGSM49
+    AwEHA0IABPRRy9i3yQcxgMpvCSsI7Qe6YZMimUHOecPZWaGz5jEfB4+p5wT7dF3e
+    QrgjDWshVJZvK6KGO7nDh97GnbVXrTCjEDAOMAwGA1UdEwQFMAMBAf8wCgYIKoZI
+    zj0EAwIDSQAwRgIhALMUgLYPtICN9ci/ZOoXeZxUhn3i4wIo2mPKEWX0IcfpAiEA
+    8Jid6bzwUqAdDZPSOtaEBXV9uRIrNua0Qxl1S55TlWY=
+    -----END CERTIFICATE-----
+  client.pem: |
+    -----BEGIN CERTIFICATE-----
+    MIICGTCCAb+gAwIBAgIEWNPh1jAKBggqhkjOPQQDAjB+MSswKQYDVQQDEyJTcGx1
+    bmsgQ2xvdWQgQ2VydGlmaWNhdGUgQXV0aG9yaXR5MRYwFAYDVQQHEw1TYW4gRnJh
+    bmNpc2NvMRMwEQYDVQQKEwpTcGx1bmsgSW5jMQswCQYDVQQIEwJDQTEVMBMGA1UE
+    CxMMU3BsdW5rIENsb3VkMB4XDTE3MDMyMzE0NTUxOFoXDTIyMDMyMjE0NTUxOFow
+    gaoxMjAwBgNVBAMMKWlucHV0LXByZC1wLWY1Y3BqOG0yOTJiay5jbG91ZC5zcGx1
+    bmsuY29tMRYwFAYDVQQHDA1TYW4gRnJhbmNpc2NvMRUwEwYDVQQKDAxTcGx1bmsg
+    Q2xvdWQxCzAJBgNVBAgMAkNBMSMwIQYJKoZIhvcNAQkBFhRjbG91ZC1lbmdAc3Bs
+    dW5rLmNvbTETMBEGA1UECwwKQ2xvdWQgVGVhbTBZMBMGByqGSM49AgEGCCqGSM49
+    AwEHA0IABN5K7GuOgzNzInU1wYGuMN5jORMrUZbyAtzQ/HrbbgGG6ES0ogtzjxNk
+    eBgnqjPzMMR257mGBLquAY/05qiwWSkwCgYIKoZIzj0EAwIDSAAwRQIhAL5xgXbi
+    2slM9k+NlF0iTEioEa0e8MTjhDTYrKu+LcYQAiBOp6wfZ50VvvIoBqBfRcaJ9dg+
+    pKzz0ydodJGVBEKYew==
+    -----END CERTIFICATE-----
+
+    -----BEGIN ENCRYPTED PRIVATE KEY-----
+    MIHeMEkGCSqGSIb3DQEFDTA8MBsGCSqGSIb3DQEFDDAOBAicJ1hjuyL1MQICCAAw
+    HQYJYIZIAWUDBAEqBBCvb2uMo7CwJ3To7GdgDRaXBIGQrK+nLY6/8q/4J/v/Y61U
+    HRW7HF29Hk2vz22GByHC2CyKRvmJV5RrfivP8V+upSkfJNEho117j4dgEr2A+pNp
+    UUQknSajyxMAgKv4AaTkmqXOEExTrU0SZIYfFmfhY75/mgCuuEW3Jud1XnvXRgyg
+    CHdQQMXN/JFJo1LrXBG1DJGJsYDK6IY/JvtYGc72136a
+    -----END ENCRYPTED PRIVATE KEY-----
+  limits.conf: |-
+    # By default a universal or light forwarder is limited to 256kB/s
+    # Either set a different limit in kB/s, or set the value to zero to
+    # have no limit.
+    # Note that a full speed UF can overwhelm a single indexer.
+
+    [thruput]
+    maxKBps = 256
+  outputs.conf: |
+    [tcpout]
+    defaultGroup = splunkcloud
+
+    [tcpout:splunkcloud]
+    compressed = false
+    disabled = false
+    server = input-prd-p-f5cpj8m292bk.cloud.splunk.com:9997
+    sslCommonNameToCheck = input-prd-p-f5cpj8m292bk.cloud.splunk.com
+    sslCertPath = $SPLUNK_HOME/etc/apps/splunkclouduf/default/client.pem
+    sslPassword = ab436388c35e8a46ded9fd0357ef6ea0
+    sslRootCAPath = $SPLUNK_HOME/etc/apps/splunkclouduf/default/cacert.pem
+    sslVerifyServerCert = true
+    useACK = true
+  server.pem: |
+    -----BEGIN CERTIFICATE-----
+    MIICGTCCAb+gAwIBAgIEWNPh1jAKBggqhkjOPQQDAjB+MSswKQYDVQQDEyJTcGx1
+    bmsgQ2xvdWQgQ2VydGlmaWNhdGUgQXV0aG9yaXR5MRYwFAYDVQQHEw1TYW4gRnJh
+    bmNpc2NvMRMwEQYDVQQKEwpTcGx1bmsgSW5jMQswCQYDVQQIEwJDQTEVMBMGA1UE
+    CxMMU3BsdW5rIENsb3VkMB4XDTE3MDMyMzE0NTUxOFoXDTIyMDMyMjE0NTUxOFow
+    gaoxMjAwBgNVBAMMKWlucHV0LXByZC1wLWY1Y3BqOG0yOTJiay5jbG91ZC5zcGx1
+    bmsuY29tMRYwFAYDVQQHDA1TYW4gRnJhbmNpc2NvMRUwEwYDVQQKDAxTcGx1bmsg
+    Q2xvdWQxCzAJBgNVBAgMAkNBMSMwIQYJKoZIhvcNAQkBFhRjbG91ZC1lbmdAc3Bs
+    dW5rLmNvbTETMBEGA1UECwwKQ2xvdWQgVGVhbTBZMBMGByqGSM49AgEGCCqGSM49
+    AwEHA0IABCMda7xoGSorS2L+X29cq8k99Yp4teNihwJvmMN+kqYNR8sR8WRyyOcf
+    qpKjhDvkgREBXMak5Vgt8KnpmPSv7MkwCgYIKoZIzj0EAwIDSAAwRQIgaJWex5Pj
+    lvAgltsgUhXf1HPbll2FjmT3raQ2C3Y4cD0CIQDNbq4Hrs04nmI0AbSHyRD3VxTl
+    7Y4Z+OEn+AbD8w1mVQ==
+    -----END CERTIFICATE-----
+
+    -----BEGIN ENCRYPTED PRIVATE KEY-----
+    MIHeMEkGCSqGSIb3DQEFDTA8MBsGCSqGSIb3DQEFDDAOBAjcbLe24jdvlAICCAAw
+    HQYJYIZIAWUDBAEqBBBdrIokaJ8sY6HRgIsPWvWyBIGQOl3w/HhmhEZCw9xyilPK
+    SRZmfTHQJ2UTYrFr5F/x/cbpnmN/TAnWMWwsfDl/qA341Zvs7r8D9pWVxDZdhoW4
+    NGsPCQt8218+JH/hk2NuVyFq63FSxB04I2qoHkqmkeYwVUD5wOBPWrYdxW52tJ2f
+    M5RheoAX62KqiG9VKd9zEUm6OlMvotY4fu1IV83QuTQV
+    -----END ENCRYPTED PRIVATE KEY-----
