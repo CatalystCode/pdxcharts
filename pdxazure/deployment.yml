@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: pdxazure-deployment
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        name: pdxazure
+        app: pdxazure-app
+    spec:
+      containers:
+      - name: pdxazure
+        image: nikeacr.azurecr.io/pdxazure:latest
+        env:
+        - name: NEW_RELIC_LICENSE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: nria-newrelic-infra
+              key: api-key
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+      - name: acr-secret
