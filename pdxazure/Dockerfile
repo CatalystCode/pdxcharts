@@ -5,9 +5,12 @@
 
 FROM openjdk:8-jdk
 
-ADD . /app
 WORKDIR /app
+
+COPY build/libs/pdxazure-1.0.0-SNAPSHOT.jar .
+COPY newrelic.jar .
+COPY newrelic.yml .
 
 EXPOSE 8080
 
-CMD ["./gradlew", "run"]
+CMD ["java", "-D@appId=pdxazure", "-D@environment=local", "-javaagent:newrelic.jar", "-jar", "pdxazure-1.0.0-SNAPSHOT.jar"]
