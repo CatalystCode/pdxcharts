@@ -64,7 +64,7 @@ RUN apt-get update \
 
 So while this Dockerfile builts succesfully and the resulting image can be pushed to Docker Hub (or any other registry), the agent does not start when you run that image (the image is `oguzpastirmaci/trendmicro:single-run-in-dockerfile`).
 
-So I tried deploying the agent with the [shell script](./run.sh) I got from my Deep Security Manager inside the Dockerfile and that works:
+So I tried deploying the agent with the shell script I got from my Deep Security Manager inside the Dockerfile and that works:
 
 ```Dockerfile
 FROM ubuntu:14.04
