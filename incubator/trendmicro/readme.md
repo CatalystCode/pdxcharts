@@ -1,7 +1,5 @@
 Before I begin listing what works and what doesn't, let me start with saying that there was a project named container-poc in Deep Security's GitHub repo. It seems to be deleted last month. You can see it in Google's cache [here](https://webcache.googleusercontent.com/search?q=cache:qkhlc0_l9VYJ:https://github.com/deep-security/container-poc/tree/master/docker+&cd=1&hl=en&ct=clnk&gl=us). Contacting your Trend Micro account manager would be good idea to learn if the project is still active.
 
-To simplify troubleshooting, I used the Deep Security `TenantID` and `token` inside the Dockerfiles/scripts instead of setting them as variables.
-
 Here's the summary of what I tried:
 
 - Deploying the Trend Micro Deep Security (TMDS) agents to Kubernetes nodes deployed by Azure Container Service (ACS) is pretty straightforward since ACS deploys Ubuntu 16.04 nodes. The easisest way to deploy the agents to Kubernetes nodes is using the [Custom Script Extension (CSE)](https://github.com/deep-security/azure-vm-extensions).
@@ -17,7 +15,7 @@ CSE is also available in Terraform.
 
 - If you run a 14.04 container interactively (`docker run -it ubuntu:14.04`) and deploy the agent using the script Trend Micro provides, it deploys successfully and starts reporting to Deep Security Manager almost instantly.
 
-Here's the script:
+Here's the script (To simplify troubleshooting, I used the Deep Security `TenantID` and `token` inside the Dockerfiles/scripts instead of setting them as variables):
 
 ```Bash
 #!/usr/bin/env bash
