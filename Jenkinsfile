@@ -22,13 +22,13 @@ node {
   }
 
   // set additional git envvars for image tagging
-  pipeline.gitEnvVars()
+  //pipeline.gitEnvVars()
 
   // used to debug deployment setup
-  env.DEBUG_DEPLOY = true
+  //env.DEBUG_DEPLOY = true
 
   // debugging helm deployments
-  if (env.DEBUG_DEPLOY) {
+  //if (env.DEBUG_DEPLOY) {
     println "Runing helm tests"
     //pipeline.kubectlTest()
     // Test that kubectl can correctly communication with the Kubernetes API
@@ -38,7 +38,7 @@ node {
     //setup helm connectivity to Kubernetes API and Tiller
     sh "helm init"
     sh "helm version"
-  }
+  //}
 
   //def acct = pipeline.getContainerRepoAcct(config)
 
