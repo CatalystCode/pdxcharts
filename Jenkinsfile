@@ -22,7 +22,7 @@ node {
   }
 
   // set additional git envvars for image tagging
-  //pipeline.gitEnvVars()
+  pipeline.gitEnvVars()
 
   // used to debug deployment setup
   //env.DEBUG_DEPLOY = true
