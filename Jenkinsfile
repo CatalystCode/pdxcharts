@@ -14,7 +14,7 @@ volumes:[
     hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
 ]){
 
-  def pipeline = new io.Pipeline()
+  //def pipeline = new io.Pipeline()
 
   node ('mypod') {
 
