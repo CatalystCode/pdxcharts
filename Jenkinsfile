@@ -2,8 +2,11 @@
 // load pipeline functions
 //@Library('Pipeline@master')
 //def pipeline = new io.helm.Pipeline()
-
-node {
+podTemplate(label: 'helmpipe', containers: [
+    containerTemplate(name: 'helm', image: 'dtzar/jnlp-slave-helm:latest', ttyEnabled: true),
+  ])
+{
+  node ('helmpipe'){
   def pwd = pwd()
   def workDir = "${pwd}/pdxazure/"
   def chart_dir = "${pwd}/pdxcharts/incubator/pdxazure"
@@ -22,7 +25,7 @@ node {
   }
 
   // set additional git envvars for image tagging
-  pipeline.gitEnvVars()
+  //pipeline.gitEnvVars()
 
   // used to debug deployment setup
   //env.DEBUG_DEPLOY = true
@@ -126,3 +129,4 @@ node {
     }
   //}
 }
+} //end podTemplate
