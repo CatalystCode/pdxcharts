@@ -7,6 +7,8 @@ podTemplate(label: 'helmpipe', containers: [
   ])
 {
   node ('helmpipe'){
+  container('helm')
+  {
   def pwd = pwd()
   def workDir = "${pwd}/pdxazure/"
   def chart_dir = "${pwd}/pdxcharts/incubator/pdxazure"
@@ -42,7 +44,7 @@ podTemplate(label: 'helmpipe', containers: [
     sh "helm init"
     sh "helm version"
   //}
-
+  } //end container('helm')
   //def acct = pipeline.getContainerRepoAcct(config)
 
   // tag image with version, and branch-commit_id
