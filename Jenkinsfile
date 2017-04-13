@@ -1,7 +1,7 @@
 #!/usr/bin/groovy
 
 // load pipeline functions
-// @Library('github.com/lachie83/jenkins-pipeline@master')
+@Library('github.com/lachie83/jenkins-pipeline@master')
 
 podTemplate(label: 'mypod', containers: [
     containerTemplate(name: 'jnlp', image: 'jenkinsci/jnlp-slave:2.62', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins'),
@@ -14,7 +14,7 @@ volumes:[
     hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
 ]){
 
-  //def pipeline = new io.Pipeline()
+  def pipeline = new io.estrada.Pipeline()
 
   node ('mypod') {
 
