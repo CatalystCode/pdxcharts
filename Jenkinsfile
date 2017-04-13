@@ -2,8 +2,8 @@
 
 podTemplate(label: 'mypod', containers: [
     containerTemplate(name: 'jnlp', image: 'jenkinsci/jnlp-slave:2.62', args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins'),
-    containerTemplate(name: 'docker', image: 'docker:1.12.6',       command: 'cat', ttyEnabled: true),
-    containerTemplate(name: 'golang', image: 'golang:1.7.5', command: 'cat', ttyEnabled: true),
+    containerTemplate(name: 'docker', image: 'docker:17.04.0-git',       command: 'cat', ttyEnabled: true),
+    containerTemplate(name: 'gradle', image: 'gradle:3.4-jdk8', command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'helm', image: 'lachlanevenson/k8s-helm:v2.3.0', command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl:v1.4.8', command: 'cat', ttyEnabled: true)
 ],
@@ -12,13 +12,13 @@ volumes:[
 ]){
 
     // load pipeline functions
-    @Library('github.com/lachie83/jenkins-pipeline@master')
-    def pipeline = new io.estrado.Pipeline()
+    @Library('github.com/CatalystCode/pdxcharts@master')
+    def pipeline = new io.Pipeline()
 
   node ('mypod') {
 
     def pwd = pwd()
-    def chart_dir = "${pwd}/charts/croc-hunter"
+    def chart_dir = "${pwd}/incubator/pdxazure"
 
     checkout scm
 
@@ -37,7 +37,7 @@ volumes:[
     pipeline.gitEnvVars()
 
     // used to debug deployment setup
-    env.DEBUG_DEPLOY = false
+    env.DEBUG_DEPLOY = true
 
     // debugging helm deployments
     if (env.DEBUG_DEPLOY) {
@@ -60,18 +60,15 @@ volumes:[
 
     stage ('compile and test') {
 
-      container('golang') {
-        sh "go test -v -race ./..."
-        sh "make bootstrap build"
+      container('gradle') {
+               sh "gradlew"
       }
     }
 
     stage ('test deployment') {
 
-      // run go tests
-      container('golang') {
-      }
-
+      // run tests
+      
       container('helm') {
 
         // run helm chart linter
