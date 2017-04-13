@@ -13,7 +13,7 @@ volumes:[
 
     // load pipeline functions
     @Library('github.com/lachie83/jenkins-pipeline@master')
-    def pipeline = new io.estrada.Pipeline()
+    def pipeline = new io.estrado.Pipeline()
 
   node ('mypod') {
 
