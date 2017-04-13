@@ -12,11 +12,11 @@ volumes:[
 ]){
 
     // load pipeline functions
-    library identifier: 'pdxcharts@master', retriever: modernSCM(
+    library identifier: 'github.com/CatalystCode/pdxcharts@master', retriever: modernSCM(
     [$class: 'GitSCMSource',
     remote: 'github.com/CatalystCode/pdxcharts@master',
     credentialsId: '1431b55f-39a9-4cb9-814a-8b87af81acd2'])
-    @Library('pdxcharts@master')
+    @Library('github.com/CatalystCode/pdxcharts@master')
     def pipeline = new io.Pipeline()
 
   node ('mypod') {
