@@ -104,27 +104,11 @@ With these credentials we will be able to push the images to the registry.
 
 These are the following steps to run:
 
-1. Install TMDS through Custom Script Extension.
-1. Deploy New Relic infra in the agents.
-1. Deploy Splunk.
+1. [Install TMDS through Custom Script Extension.](./incubator/trendmicro/readme.md)
+1. [Deploy New Relic infra in the agents.](./incubator/newrelic-infra)
+1. [Deploy Splunk.](./incubator/splunk/readme.md)
 1. Deploy Application.
 1. Test monitoring, logging and security.
-
-## Deploy New Relic Infrastructure inside a Azure Kubernetes Cluster
-
-First, we will create a Kubernetes Azure Container Service. Later, we will create Dockerfile to push an image into to the Azure Container Registry. After that, we will create a helm charts to wrap our environment and finally, we will deploy it in our cluster.
-
-
-Basically, we will create a Docker image with the New Relic infrastructure. After that, we will upload that image to the ACR where it will be pulled by a helm chart to deploy it into our kubernetes cluster.
-
-### Create docker image and push it to ACR
-
-Let's start by cloning the currently repository and going to the following folder.
-
-
-### Create helm chart
-
-### Deploy New Relic into the cluster
 
 
 

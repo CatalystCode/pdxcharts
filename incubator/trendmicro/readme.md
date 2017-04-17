@@ -1,9 +1,12 @@
+# Deploy Trend Micro Deep Security in the context of K8s on Azure
+
+## Considerations
+
 Before I begin listing what works and what doesn't, let me start with saying that there was a project named container-poc in Deep Security's GitHub repo. It seems to be deleted last month. You can see it in Google's cache [here](https://webcache.googleusercontent.com/search?q=cache:qkhlc0_l9VYJ:https://github.com/deep-security/container-poc/tree/master/docker+&cd=1&hl=en&ct=clnk&gl=us). Contacting your Trend Micro account manager would be good idea to learn if the project is still active.
 
 Here's the summary of what I tried:
 
-- Deploying the Trend Micro Deep Security (TMDS) agents to Kubernetes nodes deployed by Azure Container Service (ACS) is pretty straightforward since ACS deploys Ubuntu 16.04 nodes. The easisest way to deploy the agents to Kubernetes nodes is using the [Custom Script Extension (CSE)](https://github.com/deep-security/azure-vm-extensions).
-CSE is also available in Terraform.
+- Deploying the Trend Micro Deep Security (TMDS) agents to Kubernetes nodes deployed by Azure Container Service (ACS) is pretty straightforward since ACS deploys Ubuntu 16.04 nodes. The easisest way to deploy the agents to Kubernetes nodes is using the [Custom Script Extension (CSE)](https://github.com/deep-security/azure-vm-extensions). CSE is also available in Terraform.
 
 - Tectonic uses CoreOS as the base OS. Since CoreOS doesn't have a package manager by design and Trend Micro doesn't provide a containerized agent, it's not possible to deploy the TMDS agents to Tectonic nodes.
 
@@ -14,6 +17,8 @@ CSE is also available in Terraform.
 - One important point running the agent in a container is to make sure you edit the `policy-rc.d` to allow the agent to run as a service. The sed line in the following examples changes the value from 101 (not allowed) to 0 (allowed). Otherwise, the agent cannot start.
 
 - If you run a 14.04 container interactively (`docker run -it ubuntu:14.04`) and deploy the agent using the script Trend Micro provides, it deploys successfully and starts reporting to Deep Security Manager almost instantly.
+
+## Deploying TDMS to a container
 
 Here's the script (To simplify troubleshooting, I used the Deep Security `TenantID` and `token` inside the Dockerfiles/scripts instead of setting them as variables):
 
@@ -100,7 +105,7 @@ This one works, but there's probably a more elegant solution out there in the in
 
 Since this container should be able to access the node, mounting nodes root to container. Open ports are from Deep Security documentation [here](https://success.trendmicro.com/solution/1060007-communication-ports-used-by-deep-security).
 
-I did my tests with a [Deep Security SaaS](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/trendmicro.accounts) Manager so if you're using your own Deep Security Manager with a different configuration, you might need to edit the ports. 
+I did my tests with a [Deep Security SaaS](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/trendmicro.accounts) Manager so if you're using your own Deep Security Manager with a different configuration, you might need to edit the ports.
 
 ```YAML
 apiVersion: extensions/v1beta1
@@ -138,3 +143,5 @@ spec:
 ```
 
 This Daemonset successfully creates the container and it starts reporting to the Deep Security Manager. Depending on the policies/settings you have (e.g. real-time AV scanning) you might hit some issues.
+
+- [Back to homepage](../../README.md)
