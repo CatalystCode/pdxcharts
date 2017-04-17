@@ -1,12 +1,12 @@
 {
   "app": {
-    "name": "croc-hunter",
+    "name": "pdxazure",
     "replicas": "1",
     "cpu": "10m",
     "memory": "128Mi"
   },
   "container_repo": {
-    "host": "newrelic-infra.azurecr.io",
+    "host": "nikeacr.azurecr.io",
     "master_acct": "acrcreds",
     "alt_acct": "acrcreds",
     "jenkins_creds_id": "jenkins",
