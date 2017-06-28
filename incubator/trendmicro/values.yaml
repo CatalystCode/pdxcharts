@@ -1,0 +1,10 @@
+# Default values for running Trend Micro.
+image:
+  repository: oguzpastirmaci/trendmicro
+  tag: latest
+  pullPolicy: Always
+
+resources:
+  requests:
+    cpu: 0.15
+    memory: 256m
